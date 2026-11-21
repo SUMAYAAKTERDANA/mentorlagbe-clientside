@@ -43,7 +43,9 @@ export default function PostTuitionPage() {
       }
 
       
-      await axios.post("http://localhost:5000/api/tuitions", data, {
+      await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/tuitions`,
+        data, {
         withCredentials: true, 
         headers: { 
           "Content-Type": "multipart/form-data",

@@ -31,7 +31,9 @@ export default function TuitionDetailsPage() {
 
   const fetchTuition = async () => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/tuitions/${id}`);
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/tuitions/${id}`
+    );
       setTuition(response.data);
     } catch  {
       toast.error("Failed to load tuition details.");
@@ -44,7 +46,9 @@ export default function TuitionDetailsPage() {
     e.preventDefault();
     setApplying(true);
     try {
-      await axios.post(`http://localhost:5000/api/applications`, {
+      await axios.post
+      (`${process.env.NEXT_PUBLIC_API_URL}/api/applications`, 
+        {
         tuitionId: id,
         tuitionTitle: tuition.title,
         subject: tuition.subject,

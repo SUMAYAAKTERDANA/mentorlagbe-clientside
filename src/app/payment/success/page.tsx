@@ -17,7 +17,9 @@ export default function PaymentSuccessPage() {
       if (session?.user) {
         try {
           
-          const response = await axios.post("http://localhost:5000/api/payments/success", {
+          const response = await axios.post(
+           `${process.env.NEXT_PUBLIC_API_URL}/api/payments/success`,
+             {
             planName: "Pro Plan",
             amount: 15,
             transactionId: "txn_" + Date.now(),

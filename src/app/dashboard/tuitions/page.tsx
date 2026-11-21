@@ -16,8 +16,10 @@ export default function AdminTuitionsPage() {
 
   const fetchTuitions = async () => {
     try {
-      
-      const response = await axios.get("http://localhost:5000/api/tuitions/admin/all", {
+     
+      const response = await axios.get
+      (`${process.env.NEXT_PUBLIC_API_URL}/api/payments/admin/all`,
+         {
         withCredentials: true,
       });
       setTuitions(response.data);
@@ -31,7 +33,7 @@ export default function AdminTuitionsPage() {
   const handleStatusChange = async (id: string, status: string) => {
     try {
       await axios.patch(
-        `http://localhost:5000/api/tuitions/admin/${id}/status`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/tuitions/admin/${id}/status`,
         { status },
         { withCredentials: true }
       );

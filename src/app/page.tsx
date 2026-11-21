@@ -13,7 +13,9 @@ export default function Home() {
   useEffect(() => {
     const fetchFeatured = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/tuitions/featured");
+        const res = await axios.get(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/tuitions/featured`
+        );
         setFeatured(res.data);
       } catch {
         console.error("Failed to fetch featured tuitions");

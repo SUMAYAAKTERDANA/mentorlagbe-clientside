@@ -17,7 +17,8 @@ export default function MyTuitionsPage() {
 
   const fetchMyTuitions = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/api/tuitions/my-tuitions", {
+      const response = await axios.get
+      (`${process.env.NEXT_PUBLIC_API_URL}/api/tuitions/my-tuitions`, {
         withCredentials: true,
       });
       setTuitions(response.data);
@@ -31,7 +32,8 @@ export default function MyTuitionsPage() {
   const handleDelete = async (id: string) => {
     if (!confirm("Are you sure you want to delete this tuition?")) return;
     try {
-      await axios.delete(`http://localhost:5000/api/tuitions/${id}`, {
+      await axios.delete
+      (`${process.env.NEXT_PUBLIC_API_URL}/api/tuitions/${id}`, {
         withCredentials: true,
       });
       toast.success("Tuition deleted successfully!");
@@ -43,7 +45,8 @@ export default function MyTuitionsPage() {
 
   const handleToggleStatus = async (id: string) => {
     try {
-      await axios.patch(`http://localhost:5000/api/tuitions/${id}/toggle`, {}, {
+      await axios.patch(
+         `${process.env.NEXT_PUBLIC_API_URL}/api/tuitions/${id}/toggle`, {}, {
         withCredentials: true,
       });
       toast.success("Status updated!");

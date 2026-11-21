@@ -15,7 +15,9 @@ export default function ManageUsersPage() {
 
   const fetchUsers = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/api/users", {
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/users`,
+         {
         withCredentials: true,
       });
       setUsers(response.data);
@@ -29,7 +31,7 @@ export default function ManageUsersPage() {
   const handleRoleChange = async (userId: string, newRole: string) => {
     try {
       await axios.patch(
-        `http://localhost:5000/api/users/${userId}/role`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/users/${userId}/role`,
         { role: newRole },
         { withCredentials: true }
       );

@@ -12,7 +12,9 @@ export default function AdminTransactionsPage() {
   useEffect(() => {
     const fetchPayments = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/payments/admin/all", {
+        const response = await axios.get(
+           `${process.env.NEXT_PUBLIC_API_URL}/api/payments/admin/all`,
+            {
           withCredentials: true,
         });
         setPayments(response.data);

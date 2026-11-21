@@ -16,7 +16,9 @@ export default function MyApplicationsPage() {
 
   const fetchApplications = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/api/applications/my-applications", {
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/applications/my-applications`, 
+        {
         withCredentials: true,
       });
       setApplications(response.data);
@@ -30,7 +32,7 @@ export default function MyApplicationsPage() {
   const handleCancel = async (id: string) => {
     if (!confirm("Are you sure you want to cancel this application?")) return;
     try {
-      await axios.delete(`http://localhost:5000/api/applications/${id}`, {
+      await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/${id}`, {
         withCredentials: true,
       });
       toast.success("Application cancelled!");

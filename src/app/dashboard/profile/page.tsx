@@ -38,7 +38,9 @@ export default function ProfilePage() {
         data.append("image", imageFile);
       }
 
-      await axios.patch("http://localhost:5000/api/users/profile", data, {
+      await axios.patch(
+       `${process.env.NEXT_PUBLIC_API_URL}/api/users/profile`,
+        data, {
         withCredentials: true,
         headers: { "Content-Type": "multipart/form-data" },
       });
