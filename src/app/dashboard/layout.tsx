@@ -23,7 +23,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const { data: session } = useSession();
 
   
-  const role = session?.user?.role || "student";
+ const role = (session?.user as { role?: string })?.role || "student";
 
   
   const getSidebarLinks = () => {

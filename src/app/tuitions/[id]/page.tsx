@@ -9,12 +9,28 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useSession } from "@/lib/auth-client";
 import { toast } from "sonner";
+import Image from "next/image";
+
+interface Tuition {
+  _id: string;
+  title: string;
+  subject: string;
+  classLevel: string;
+  mode: string;
+  location?: string;
+  monthlyFee: number;
+  daysPerWeek: number;
+  bannerImage?: string;
+  description: string;
+  tutorName: string;
+  tutorEmail: string;
+}
 
 export default function TuitionDetailsPage() {
   const { id } = useParams();
   const router = useRouter();
   const { data: session } = useSession();
-  const [tuition, setTuition] = useState<any>(null);
+  const [tuition, setTuition] = useState<Tuition | null>(null);
   const [loading, setLoading] = useState(true);
   const [applying, setApplying] = useState(false);
   const [showApplyForm, setShowApplyForm] = useState(false);
@@ -26,34 +42,29 @@ export default function TuitionDetailsPage() {
   });
 
   useEffect(() => {
+    const fetchTuition = async () => {
+      try {
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/tuitions/${id}`);
+        setTuition(response.data);
+      } catch {
+        toast.error("Failed to load tuition details.");
+      } finally {
+        setLoading(false);
+      }
+    };
     fetchTuition();
   }, [id]);
-
-  const fetchTuition = async () => {
-    try {
-      const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/tuitions/${id}`
-    );
-      setTuition(response.data);
-    } catch  {
-      toast.error("Failed to load tuition details.");
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const handleApply = async (e: React.FormEvent) => {
     e.preventDefault();
     setApplying(true);
     try {
-      await axios.post
-      (`${process.env.NEXT_PUBLIC_API_URL}/api/applications`, 
-        {
+      await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/applications`, {
         tuitionId: id,
-        tuitionTitle: tuition.title,
-        subject: tuition.subject,
-        monthlyFee: tuition.monthlyFee,
-        tutorEmail: tuition.tutorEmail,
+        tuitionTitle: tuition?.title,
+        subject: tuition?.subject,
+        monthlyFee: tuition?.monthlyFee,
+        tutorEmail: tuition?.tutorEmail,
         studentPhone: applyData.studentPhone,
         preferredSchedule: applyData.preferredSchedule,
         studentNote: applyData.studentNote
@@ -61,8 +72,12 @@ export default function TuitionDetailsPage() {
 
       toast.success("Application submitted successfully!");
       router.push("/dashboard/my-applications");
-    } catch (error: any) {
-      toast.error(error.response?.data?.message || "Failed to apply.");
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        toast.error(error.response?.data?.message || "Failed to apply.");
+      } else {
+        toast.error("An unexpected error occurred.");
+      }
     } finally {
       setApplying(false);
     }
@@ -70,8 +85,7 @@ export default function TuitionDetailsPage() {
 
   if (loading) return <div className="text-center py-20">Loading...</div>;
   if (!tuition) return <div className="text-center py-20">Tuition not found</div>;
-
-  const isStudent = session?.user?.role === "student";
+const isStudent = (session?.user as { role?: string })?.role === "student";
 
   return (
     <div className="min-h-screen bg-background">
@@ -81,9 +95,9 @@ export default function TuitionDetailsPage() {
           
           {/* Left Column - Details */}
           <div className="md:col-span-2 space-y-6">
-            <div className="h-64 md:h-96 w-full bg-muted rounded-xl overflow-hidden">
+            <div className="relative h-64 md:h-96 w-full bg-muted rounded-xl overflow-hidden">
               {tuition.bannerImage ? (
-                <img src={tuition.bannerImage} alt={tuition.title} className="w-full h-full object-cover" />
+                <Image src={tuition.bannerImage} alt={tuition.title} fill className="object-cover" />
               ) : (
                 <div className="w-full h-full flex items-center justify-center text-muted-foreground">No Image</div>
               )}

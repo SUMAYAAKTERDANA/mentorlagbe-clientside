@@ -14,14 +14,17 @@ export default function ProfilePage() {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
 
+  
   useEffect(() => {
     if (session?.user) {
+      const user = session.user as { name?: string; phone?: string; bio?: string };
       setFormData({
-        name: session.user.name || "",
-        phone: (session.user as any).phone || "",
-        bio: (session.user as any).bio || "",
+        name: user.name || "",
+        phone: user.phone || "",
+        bio: user.bio || "",
       });
     }
+   
   }, [session]);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -38,22 +41,22 @@ export default function ProfilePage() {
         data.append("image", imageFile);
       }
 
-      await axios.patch(
-       `${process.env.NEXT_PUBLIC_API_URL}/api/users/profile`,
-        data, {
+      await axios.patch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/profile`, data, {
         withCredentials: true,
         headers: { "Content-Type": "multipart/form-data" },
       });
 
       toast.success("Profile updated successfully!");
       
-      
       if (refetch) {
         await refetch();
       }
-    } catch (error: any) {
-      console.error(error);
-      toast.error(error.response?.data?.message || "Failed to update profile.");
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        toast.error(error.response?.data?.message || "Failed to update profile.");
+      } else {
+        toast.error("An unexpected error occurred.");
+      }
     } finally {
       setLoading(false);
     }

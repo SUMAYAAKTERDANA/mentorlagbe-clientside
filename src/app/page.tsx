@@ -5,19 +5,29 @@ import axios from "axios";
 import Navbar from "@/components/Navbar";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 
+
+interface Tuition {
+  _id: string;
+  title: string;
+  subject: string;
+  classLevel: string;
+  monthlyFee: number;
+  tutorName: string;
+  bannerImage?: string;
+}
+
 export default function Home() {
-  const [featured, setFeatured] = useState<any[]>([]);
+  const [featured, setFeatured] = useState<Tuition[]>([]);
 
   useEffect(() => {
     const fetchFeatured = async () => {
       try {
-        const res = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/tuitions/featured`
-        );
+        const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/tuitions/featured`);
         setFeatured(res.data);
-      } catch {
+      } catch  {
         console.error("Failed to fetch featured tuitions");
       }
     };
@@ -61,10 +71,15 @@ export default function Home() {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {featured.map((tuition) => (
-                <Card key={tuition._id} className="flex flex-col hover:shadow-lg transition-shadow">
-                  <div className="h-40 bg-muted overflow-hidden rounded-t-xl">
+                <Card key={tuition._id} className="flex flex-col hover:shadow-lg transition-shadow overflow-hidden">
+                  <div className="relative h-48 w-full bg-muted">
                     {tuition.bannerImage ? (
-                      <img src={tuition.bannerImage} alt={tuition.title} className="w-full h-full object-cover" />
+                      <Image 
+                        src={tuition.bannerImage} 
+                        alt={tuition.title} 
+                        fill 
+                        className="object-cover" 
+                      />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center text-muted-foreground">No Image</div>
                     )}

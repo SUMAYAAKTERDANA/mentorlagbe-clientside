@@ -5,7 +5,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function DashboardOverview() {
   const { data: session } = useSession();
-  const role = session?.user?.role;
+  
+  const role = (session?.user as { role?: string })?.role || "student";
 
   if (!session) return <div className="p-8 text-center">Loading...</div>;
 
@@ -44,7 +45,10 @@ export default function DashboardOverview() {
             <CardTitle className="text-sm font-medium text-muted-foreground">Current Plan</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-primary uppercase">{(session.user as any).plan || "Free"}</div>
+          
+            <div className="text-3xl font-bold text-primary uppercase">
+              {(session.user as { plan?: string })?.plan || "Free"}
+            </div>
           </CardContent>
         </Card>
       </div>

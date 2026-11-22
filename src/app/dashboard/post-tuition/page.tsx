@@ -113,7 +113,7 @@ export default function PostTuitionPage() {
 
             <div className="space-y-2">
               <label className="text-sm font-medium">Description</label>
-              <textarea name="description" required onChange={handleChange} className="w-full p-2 border rounded-md min-h-[100px]" placeholder="Describe your teaching style..."></textarea>
+              <textarea name="description" required onChange={handleChange} className="w-full p-2 border rounded-md min-h-25" placeholder="Describe your teaching style..."></textarea>
             </div>
 
             <div className="space-y-2">

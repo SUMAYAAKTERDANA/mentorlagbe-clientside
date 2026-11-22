@@ -2,36 +2,45 @@
 
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Card } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 
+
+interface Application {
+  _id: string;
+  studentName: string;
+  tuitionTitle: string;
+  studentEmail: string;
+  studentPhone: string;
+  preferredSchedule: string;
+  studentNote?: string;
+  status: string;
+}
+
 export default function ApplicantsPage() {
-  const [applications, setApplications] = useState<any[]>([]);
+  
+  const [applications, setApplications] = useState<Application[]>([]);
   const [loading, setLoading] = useState(true);
 
-  
-  const fetchApplications = async () => {
-    try {
-      const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/applications/tutor-applications`, 
-        { withCredentials: true }
-      );
-      setApplications(response.data);
-    } catch {
-      toast.error("Failed to fetch applicants.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
-    
-    const loadData = async () => {
-      await fetchApplications();
+    const fetchApplications = async () => {
+      try {
+        const response = await axios.get(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/applications/tutor-applications`,
+          { withCredentials: true }
+        );
+        setApplications(response.data);
+      } catch {
+        toast.error("Failed to fetch applicants.");
+      } finally {
+        setLoading(false);
+      }
     };
-    loadData();
+
+    fetchApplications();
   }, []);
+
   const handleStatusChange = async (id: string, status: string) => {
     try {
       await axios.patch(
@@ -40,7 +49,8 @@ export default function ApplicantsPage() {
         { withCredentials: true }
       );
       toast.success(`Application ${status} successfully!`);
-      fetchApplications();
+     
+      window.location.reload();
     } catch {
       toast.error("Failed to update status.");
     }
@@ -57,9 +67,9 @@ export default function ApplicantsPage() {
 
       {applications.length === 0 ? (
         <Card>
-          <div className="py-10 text-center text-muted-foreground">
+          <CardContent className="py-10 text-center text-muted-foreground">
             No applicants yet.
-          </div>
+          </CardContent>
         </Card>
       ) : (
         <div className="grid gap-4">
@@ -72,7 +82,7 @@ export default function ApplicantsPage() {
                 <p className="text-sm"><span className="font-medium">Phone:</span> {app.studentPhone}</p>
                 <p className="text-sm"><span className="font-medium">Schedule:</span> {app.preferredSchedule}</p>
                 {app.studentNote && (
-                  <p className="text-sm mt-1 italic text-muted-foreground">"{app.studentNote}"</p>
+                  <p className="text-sm mt-1 italic text-muted-foreground">&quot;{app.studentNote}&quot;</p>
                 )}
                 
                 <span className={`inline-block mt-2 px-2 py-1 text-xs font-semibold rounded-full ${

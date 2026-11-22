@@ -3,8 +3,8 @@
 MentorLagbe is a full-stack role-based tuition management platform built with Next.js, Express, MongoDB, BetterAuth, JWT, and Stripe. It connects qualified Tutors with Students looking for personalized academic guidance.
 
 ## 🌐 Live Links
-- **Live Site:** [https://mentor-lagbe-clientside.vercel.app/](https://mentor-lagbe-clientside.vercel.app/) 
-- **Server API:** [https://mentorlagbe-server.onrender.com/](https://mentorlagbe-server.onrender.com/) 
+- **Live Site:** https://mentorlagbe-clientside.vercel.app
+- **Server API:** 
 
 ## 🔐 Admin Credentials
 - **Email:** `admin@mentorlagbe.com`
