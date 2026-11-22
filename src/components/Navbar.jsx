@@ -9,7 +9,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 export default function Navbar() {
   const { data: session, isPending } = useSession();
   const router = useRouter();
-
+ console.log(session)
   const handleSignOut = async () => {
     await signOut();
     router.push("/");
