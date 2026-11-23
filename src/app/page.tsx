@@ -34,10 +34,13 @@ export default function Home() {
     fetchFeatured();
   }, []);
 
+  // return (
+  //   <div className="min-h-screen bg-background font-sans">
+  //     <Navbar />
   return (
-    <div className="min-h-screen bg-background font-sans">
-      <Navbar />
-      
+  <div className="min-h-screen bg-slate-50">
+    <Navbar />
+   
       <main>
         {/* Hero Section */}
         <section className="relative bg-linear-to-br from-primary/10 via-background to-background py-24 lg:py-32">
