@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { 
   Menu, 
   X, 
@@ -19,13 +19,26 @@ import { useSession } from "@/lib/auth-client";
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const router = useRouter();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const { data: session } = useSession();
+  const { data: session, isPending } = useSession();
 
   
- const role = (session?.user as { role?: string })?.role || "student";
+  useEffect(() => {
+    if (!isPending && !session) {
+      router.push("/sign-in"); 
+    }
+  }, [session, isPending, router]);
+
+  if (isPending) {
+    return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+  }
+
+  if (!session) return null;
 
   
+  const role = (session?.user as { role?: string })?.role || "student";
+
   const getSidebarLinks = () => {
     const commonLinks = [
       { name: "Overview", href: "/dashboard", icon: LayoutDashboard },
@@ -33,12 +46,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     ];
 
     if (role === "student") {
-      return [
-        ...commonLinks,
-        { name: "My Applications", href: "/dashboard/my-applications", icon: FileText },
-      ];
+      return [...commonLinks, { name: "My Applications", href: "/dashboard/my-applications", icon: FileText }];
     }
-
     if (role === "tutor") {
       return [
         ...commonLinks,
@@ -47,7 +56,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         { name: "Applicants", href: "/dashboard/applicants", icon: Users },
       ];
     }
-
     if (role === "admin") {
       return [
         ...commonLinks,
@@ -56,7 +64,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         { name: "Transactions", href: "/dashboard/transactions", icon: DollarSign },
       ];
     }
-
     return commonLinks;
   };
 
@@ -111,11 +118,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           </div>
         </aside>
 
-        {/* Sidebar (Mobile Drawer) */}
+       
         {isSidebarOpen && (
           <div className="md:hidden fixed inset-0 z-50 flex">
             <div className="fixed inset-0 bg-black/50" onClick={() => setIsSidebarOpen(false)}></div>
-            
             <div className="relative w-64 bg-background h-full p-4 shadow-xl flex flex-col">
               <div className="flex justify-between items-center mb-6">
                 <span className="font-bold text-xl">Menu</span>
