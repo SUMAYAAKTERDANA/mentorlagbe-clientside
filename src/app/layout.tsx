@@ -19,14 +19,11 @@ export const metadata: Metadata = {
   description: "Smart Tuition & Mentorship Platform",
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
- return (
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col bg-slate-50`}>
         <div className="flex-1">
           {children}
         </div>
