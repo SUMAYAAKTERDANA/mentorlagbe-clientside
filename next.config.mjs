@@ -1,14 +1,30 @@
+// /** @type {import('next').NextConfig} */
+// const nextConfig = {
+//   eslint: {
+//     ignoreDuringBuilds: true,
+//   },
+  
+  
+//   typescript: {
+//     ignoreBuildErrors: true,
+//   },
+//   images: {
+//     remotePatterns: [
+//       {
+//         protocol: 'https',
+//         hostname: 'i.ibb.co',
+//       },
+//     ],
+//   },
+// };
+
+// export default nextConfig;
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
-  
-  
-  
-  // eslint: {
-  //   ignoreDuringBuilds: true,
-  // },
   typescript: {
     ignoreBuildErrors: true,
   },
@@ -17,6 +33,10 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'i.ibb.co',
+      },
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
       },
     ],
   },
